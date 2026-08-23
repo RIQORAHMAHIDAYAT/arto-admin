@@ -16,7 +16,7 @@ npm install
 npm run dev
 ```
 
-Buka `http://localhost:5174`.
+Buka `http://localhost:5174`..
 
 ### Akun admin (hasil seed)
 
