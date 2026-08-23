@@ -31,29 +31,51 @@ export function LoginPage() {
 
   return (
     <AuthLayout
-      title="Masuk ke Dashboard Admin"
-      subtitle="Hanya untuk pengguna dengan peran admin."
+      title="Selamat Datang"
+      subtitle="Silakan masukkan email dan password Anda untuk melanjutkan."
     >
-      <button
-        type="button"
-        onClick={() => {
-          setEmail(ADMIN_EMAIL)
-          setPassword(ADMIN_PASSWORD)
-        }}
-        className="mb-4 w-full rounded-lg border border-dashed border-primary/40 bg-primary/5 px-3 py-2 text-sm text-primary transition-colors hover:bg-primary/10"
-      >
-        Isi otomatis akun admin (hasil seed)
-      </button>
-      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        <Input label="Email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <Input label="Password" type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      {import.meta.env.DEV && (
+        <button
+          type="button"
+          onClick={() => {
+            setEmail(ADMIN_EMAIL)
+            setPassword(ADMIN_PASSWORD)
+          }}
+          className="mb-5 w-full rounded-lg border border-dashed border-primary/40 bg-primary/5 px-3 py-2 text-sm text-primary transition-colors hover:bg-primary/10"
+        >
+          Isi otomatis akun admin (hasil seed)
+        </button>
+      )}
+      <form onSubmit={handleSubmit} className="space-y-3" noValidate>
+        <Input
+          type="email"
+          required
+          autoComplete="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          type="password"
+          required
+          autoComplete="current-password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         {error && (
-          <p role="alert" className="rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger">
+          <div role="alert" className="rounded-lg bg-danger/10 px-4 py-3 text-sm text-danger">
             {error}
-          </p>
+          </div>
         )}
-        <Button type="submit" fullWidth loading={submitting}>
-          Masuk
+        <Button
+          type="submit"
+          size="lg"
+          fullWidth
+          loading={submitting}
+          className="mt-6 uppercase tracking-wide shadow-md"
+        >
+          {submitting ? 'Memproses…' : 'Masuk'}
         </Button>
       </form>
     </AuthLayout>

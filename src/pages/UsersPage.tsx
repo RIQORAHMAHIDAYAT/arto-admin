@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react'
 import { useAsync } from '@/hooks/useAsync'
 import { getUsersStatistics } from '@/data/api/adminApi'
 import { PageHeader } from './PageHeader'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
+import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { LoadingBlock } from '@/components/ui/LoadingBlock'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -13,20 +15,24 @@ import { roleLabel, roleTone } from '@/lib/role'
 import { formatNumber } from '@/lib/currency'
 import { getErrorMessage } from '@/lib/errorMessage'
 
+const PAGE_SIZE = 20
+
 export function UsersPage() {
-  const { data, loading, error, refetch } = useAsync(getUsersStatistics, [])
+  const [page, setPage] = useState(1)
+  const [searchInput, setSearchInput] = useState('')
   const [query, setQuery] = useState('')
 
-  const filtered = useMemo(() => {
-    if (!data) return []
-    const q = query.trim().toLowerCase()
-    if (!q) return data
-    return data.filter(
-      (u) => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q) || u.role.toLowerCase().includes(q),
-    )
-  }, [data, query])
+  useEffect(() => {
+    const timer = setTimeout(() => setQuery(searchInput), 300)
+    return () => clearTimeout(timer)
+  }, [searchInput])
 
-  if (loading) {
+  const { data, loading, error, refetch } = useAsync(
+    () => getUsersStatistics(page, PAGE_SIZE, query || undefined),
+    [page, query],
+  )
+
+  if (loading && !data) {
     return (
       <>
         <PageHeader title="Pengguna" description="Daftar pengguna ARTO beserta metrik aktivitas." />
@@ -35,7 +41,7 @@ export function UsersPage() {
     )
   }
 
-  if (error || !data) {
+  if (error && !data) {
     return (
       <>
         <PageHeader title="Pengguna" description="Daftar pengguna ARTO beserta metrik aktivitas." />
@@ -44,28 +50,38 @@ export function UsersPage() {
     )
   }
 
+  const items = data?.items ?? []
+  const totalPages = data?.totalPages ?? 1
+
   return (
     <>
       <PageHeader
         title="Pengguna"
-        description={`${formatNumber(data.length)} pengguna terdaftar.`}
+        description={`${formatNumber(data?.total ?? 0)} pengguna terdaftar.`}
         action={
           <Input
             type="search"
-            placeholder="Cari nama, email, atau peran…"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Cari nama atau email…"
+            value={searchInput}
+            onChange={(e) => {
+              setSearchInput(e.target.value)
+              setPage(1)
+            }}
             className="w-full sm:w-72"
             aria-label="Cari pengguna"
           />
         }
       />
 
-      {filtered.length === 0 ? (
+      {items.length === 0 ? (
         <EmptyState
           icon="🔍"
           title="Pengguna tidak ditemukan"
-          description={query ? `Tidak ada pengguna yang cocok dengan "${query}".` : 'Belum ada pengguna terdaftar.'}
+          description={
+            query
+              ? `Tidak ada pengguna yang cocok dengan "${query}".`
+              : 'Belum ada pengguna terdaftar.'
+          }
         />
       ) : (
         <Card className="overflow-hidden p-0">
@@ -83,7 +99,7 @@ export function UsersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {filtered.map((u) => (
+                {items.map((u) => (
                   <tr key={u.id} className="transition-colors hover:bg-surface-hover">
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
@@ -108,6 +124,27 @@ export function UsersPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 border-t border-border px-5 py-3">
+            <p className="text-xs text-muted">
+              Halaman {page} dari {totalPages}
+            </p>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" disabled={page <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>
+                <IconChevronLeft size={16} stroke={2} />
+                Sebelumnya
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={page >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              >
+                Berikutnya
+                <IconChevronRight size={16} stroke={2} />
+              </Button>
+            </div>
           </div>
         </Card>
       )}
