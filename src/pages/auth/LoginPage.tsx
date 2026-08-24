@@ -35,36 +35,42 @@ export function LoginPage() {
       subtitle="Silakan masukkan email dan password Anda untuk melanjutkan."
     >
       {import.meta.env.DEV && (
-        <button
-          type="button"
-          onClick={() => {
-            setEmail(ADMIN_EMAIL)
-            setPassword(ADMIN_PASSWORD)
-          }}
-          className="mb-5 w-full rounded-lg border border-dashed border-primary/40 bg-primary/5 px-3 py-2 text-sm text-primary transition-colors hover:bg-primary/10"
-        >
-          Isi otomatis akun admin (hasil seed)
-        </button>
+        <div className="mb-6 rounded-xl border border-dashed border-primary/30 bg-primary/5 p-4 text-sm text-primary">
+          <p className="mb-2 font-semibold">Development Helper</p>
+          <button
+            type="button"
+            onClick={() => {
+              setEmail(ADMIN_EMAIL)
+              setPassword(ADMIN_PASSWORD)
+            }}
+            className="flex w-full items-center justify-center rounded-lg bg-white px-3 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-zinc-50 border border-primary/20"
+          >
+            Isi otomatis akun admin
+          </button>
+        </div>
       )}
-      <form onSubmit={handleSubmit} className="space-y-3" noValidate>
+      <form onSubmit={handleSubmit} className="space-y-4" noValidate>
         <Input
           type="email"
+          label="Email Address"
           required
           autoComplete="email"
-          placeholder="Email"
+          placeholder="admin@arto.id"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Input
           type="password"
+          label="Password"
           required
           autoComplete="current-password"
-          placeholder="Password"
+          placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && (
-          <div role="alert" className="rounded-lg bg-danger/10 px-4 py-3 text-sm text-danger">
+          <div role="alert" className="flex items-center rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 border border-red-200">
+            <span className="mr-2">⚠️</span>
             {error}
           </div>
         )}
@@ -73,9 +79,9 @@ export function LoginPage() {
           size="lg"
           fullWidth
           loading={submitting}
-          className="mt-6 uppercase tracking-wide shadow-md"
+          className="mt-6 font-bold tracking-wide shadow-lg shadow-primary/20"
         >
-          {submitting ? 'Memproses…' : 'Masuk'}
+          {submitting ? 'Memproses…' : 'Masuk ke Dashboard'}
         </Button>
       </form>
     </AuthLayout>
