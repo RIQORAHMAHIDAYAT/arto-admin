@@ -11,7 +11,7 @@ export interface NavItem {
 
 export function SidebarContent({ items, onNavigate }: { items: NavItem[]; onNavigate?: () => void }) {
   return (
-    <nav aria-label="Navigasi utama" className="flex flex-col gap-1">
+    <nav aria-label="Navigasi utama" className="flex flex-col gap-1.5">
       {items.map((item) => (
         <NavLink
           key={item.to}
@@ -20,10 +20,10 @@ export function SidebarContent({ items, onNavigate }: { items: NavItem[]; onNavi
           onClick={onNavigate}
           className={({ isActive }) =>
             cn(
-              'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors',
+              'flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium transition-all',
               isActive
-                ? 'bg-primary/10 text-primary'
-                : 'text-muted hover:bg-surface-hover hover:text-foreground',
+                ? 'bg-primary text-white shadow-md shadow-primary/30 font-semibold'
+                : 'text-zinc-600 hover:bg-primary/10 hover:text-primary dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white',
             )
           }
         >
