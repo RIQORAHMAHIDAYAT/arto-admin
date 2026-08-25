@@ -1,8 +1,18 @@
 import type { Credentials, Session, User } from '@/types'
 import { ApiError, clearTokens, getAccessToken, getRefreshToken, request, setTokens } from './client'
 
-export const ADMIN_EMAIL = 'admin@arto.id'
-export const ADMIN_PASSWORD = 'adminpass123'
+function optionalEnv(value: unknown): string | undefined {
+  return typeof value === 'string' && value.length > 0 ? value : undefined
+}
+
+/**
+ * Kredensial akun admin demo khusus development — dibaca dari env lokal
+ * (.env: VITE_DEMO_EMAIL / VITE_DEMO_PASSWORD, lihat .env.example).
+ * Tidak pernah ter-bundle ke build produksi karena tombol helper
+ * juga digate oleh import.meta.env.DEV di LoginPage.
+ */
+export const ADMIN_EMAIL = optionalEnv(import.meta.env.VITE_DEMO_EMAIL)
+export const ADMIN_PASSWORD = optionalEnv(import.meta.env.VITE_DEMO_PASSWORD)
 
 interface AuthResponse {
   accessToken: string

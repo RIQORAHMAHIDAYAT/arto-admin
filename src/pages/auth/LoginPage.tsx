@@ -34,14 +34,16 @@ export function LoginPage() {
       title="Selamat Datang"
       subtitle="Silakan masukkan email dan password Anda untuk melanjutkan."
     >
-      {import.meta.env.DEV && (
+      {import.meta.env.DEV && ADMIN_EMAIL && ADMIN_PASSWORD && (
         <div className="mb-6 rounded-xl border border-dashed border-primary/30 bg-primary/5 p-4 text-sm text-primary">
           <p className="mb-2 font-semibold">Development Helper</p>
           <button
             type="button"
             onClick={() => {
-              setEmail(ADMIN_EMAIL)
-              setPassword(ADMIN_PASSWORD)
+              if (ADMIN_EMAIL && ADMIN_PASSWORD) {
+                setEmail(ADMIN_EMAIL)
+                setPassword(ADMIN_PASSWORD)
+              }
             }}
             className="flex w-full items-center justify-center rounded-lg bg-white px-3 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-zinc-50 border border-primary/20"
           >
@@ -55,7 +57,7 @@ export function LoginPage() {
           label="Email Address"
           required
           autoComplete="email"
-          placeholder="admin@arto.id"
+          placeholder="nama@contoh.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
