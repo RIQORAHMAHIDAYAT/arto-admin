@@ -20,19 +20,19 @@ const navItems: NavItem[] = [
 
 function ShellSidebar({ onNavigate, className }: { onNavigate?: () => void; className?: string }) {
   return (
-    <div className={cn('flex h-full flex-col justify-between p-6 bg-white dark:bg-zinc-900 transition-colors', className)}>
+    <div className={cn('flex h-full flex-col justify-between p-6 bg-zinc-900 transition-colors', className)}>
       <div className="space-y-6">
         <div className="flex items-center gap-3 px-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-md">
             <LogoMark className="h-6 w-6" />
           </div>
           <div>
-            <h2 className="text-lg font-bold tracking-tight text-zinc-900 dark:text-white leading-none">ARTO Admin</h2>
+            <h2 className="text-lg font-bold tracking-tight text-white leading-none">ARTO Admin</h2>
             <span className="text-xs text-primary font-medium">Control Panel</span>
           </div>
         </div>
         <div className="pt-2">
-          <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Menu Utama</p>
+          <p className="px-2 pb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">Menu Utama</p>
           <SidebarContent items={navItems} onNavigate={onNavigate} />
         </div>
       </div>

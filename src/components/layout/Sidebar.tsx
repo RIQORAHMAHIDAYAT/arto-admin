@@ -23,7 +23,7 @@ export function SidebarContent({ items, onNavigate }: { items: NavItem[]; onNavi
               'flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium transition-all',
               isActive
                 ? 'bg-primary text-white shadow-md shadow-primary/30 font-semibold'
-                : 'text-zinc-600 hover:bg-primary/10 hover:text-primary dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white',
+                : 'text-zinc-300 hover:bg-zinc-800 hover:text-white',
             )
           }
         >
