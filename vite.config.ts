@@ -21,6 +21,9 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    chunkSizeWarningLimit: 1000, // react-apexcharts is ~900KB
+  },
   test: {
     environment: 'jsdom',
     globals: true,
