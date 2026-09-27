@@ -22,8 +22,8 @@ export function SidebarContent({ items, onNavigate }: { items: NavItem[]; onNavi
             cn(
               'flex items-center gap-3 rounded-xl px-3.5 py-3 text-sm font-medium transition-all',
               isActive
-                ? 'bg-primary text-white shadow-md shadow-primary/30 font-semibold'
-                : 'text-zinc-300 hover:bg-zinc-800 hover:text-white',
+                ? 'bg-primary text-primary-foreground shadow-md shadow-primary/30 font-semibold'
+                : 'text-muted hover:bg-surface-hover hover:text-foreground',
             )
           }
         >
