@@ -1,13 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { ThemePreference } from '@/types'
-
-interface ThemeContextValue {
-  theme: ThemePreference
-  resolvedTheme: 'light' | 'dark'
-  setTheme: (theme: ThemePreference) => void
-}
-
-const ThemeContext = createContext<ThemeContextValue | null>(null)
+import { ThemeContext } from '@/context/theme-context'
 
 const STORAGE_KEY = 'arto.theme'
 
@@ -55,10 +48,4 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo(() => ({ theme, resolvedTheme, setTheme }), [theme, resolvedTheme, setTheme])
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-}
-
-export function useTheme(): ThemeContextValue {
-  const ctx = useContext(ThemeContext)
-  if (!ctx) throw new Error('useTheme harus dipakai di dalam ThemeProvider')
-  return ctx
 }
