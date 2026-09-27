@@ -1,6 +1,6 @@
 import { Link, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { LoadingBlock } from '@/components/ui/LoadingBlock'
-import { isAdmin, useAuth } from '@/context/AuthContext'
+import { isAdmin, useAuth } from '@/context/auth-context'
 
 export function RequireAuth() {
   const { initializing, user } = useAuth()
