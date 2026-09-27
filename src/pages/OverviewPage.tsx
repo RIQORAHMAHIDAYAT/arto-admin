@@ -14,7 +14,8 @@ import { ErrorState } from '@/components/ui/ErrorState'
 import { getErrorMessage } from '@/lib/errorMessage'
 import { formatRupiah } from '@/lib/currency'
 import { useAuth } from '@/context/auth-context'
-import { GreetingCard, getGreetingByHour } from '@/features/dashboard/GreetingCard'
+import { getGreetingByHour } from '@/lib/greeting'
+import { GreetingCard } from '@/features/dashboard/GreetingCard'
 import { MetricCards, type MetricItem } from '@/features/dashboard/MetricCards'
 import { DonutChart } from '@/features/dashboard/DonutCharts'
 import { CategoryAmountChart } from '@/features/dashboard/CategoryAmountChart'
@@ -27,34 +28,12 @@ const GRADIENT_ORANGE = 'linear-gradient(180deg, #FB923C 0%, #EA580C 100%)'
 
 const CHART_COLORS = ['#16A34A', '#2563EB', '#D97706', '#EF4444', '#7C3AED', '#0891B2']
 
-function WelcomeOnlyCard() {
-  const { user } = useAuth()
-  return (
-    <div className="rounded-xl bg-surface p-10 text-center shadow-[var(--shadow-card)] ring-1 ring-border">
-      <h2 className="text-xl font-bold text-foreground">
-        Selamat Datang {user?.name ?? 'Pengguna'} — {user?.role ?? '-'}
-      </h2>
-      <p className="mt-2 text-sm text-muted">Anda masuk sebagai {user?.role ?? '-'}</p>
-    </div>
-  )
-}
-
 export function OverviewPage() {
   const { user } = useAuth()
-  const isAdmin = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN'
   const { data, loading, error, refetch } = useAsync(
     () => Promise.all([getOverview(), getTransactionsStatistics(), getUsersStatistics(1, 6)] as const),
     [],
   )
-
-  if (!isAdmin) {
-    return (
-      <>
-        <PageHeader title="Dashboard" description="Ringkasan akun Anda." />
-        <WelcomeOnlyCard />
-      </>
-    )
-  }
 
   if (loading) {
     return (
