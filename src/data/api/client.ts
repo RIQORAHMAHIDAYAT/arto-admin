@@ -53,6 +53,15 @@ interface ErrorBody {
   code?: string
 }
 
+function safeJson(text: string): unknown {
+  if (!text) return null
+  try {
+    return JSON.parse(text) as unknown
+  } catch {
+    return null
+  }
+}
+
 let refreshPromise: Promise<boolean> | null = null
 
 async function refreshSession(): Promise<boolean> {
@@ -70,8 +79,8 @@ async function refreshSession(): Promise<boolean> {
         clearTokens()
         return false
       }
-      const data = (await response.json()) as { accessToken: string; refreshToken: string }
-      if (!data.accessToken || !data.refreshToken) {
+      const data = safeJson(await response.text()) as { accessToken?: string; refreshToken?: string } | null
+      if (!data?.accessToken || !data?.refreshToken) {
         clearTokens()
         return false
       }
@@ -101,7 +110,7 @@ async function rawRequest<T>(path: string, options: RequestOptions): Promise<T> 
   })
 
   const text = await response.text()
-  const body = text ? (JSON.parse(text) as unknown) : null
+  const body = safeJson(text)
 
   if (!response.ok) {
     const errBody = body as ErrorBody | null
